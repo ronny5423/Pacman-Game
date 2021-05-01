@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel='stylesheet' type='text/css'  href='./style.css' />
+		<script src="./jquery-3.4.1.slim.min.js"></script>
+		<script src="./jquery.validate.min.js"></script>
+		<script type="text/javascript" src="./app.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Pacman Game</title>
+	</head>
+
+	<body>
+		<div id="outer">
+		<div class="header">
+			<img src="Img/pacman_logo_white_background-removebg-preview.png" style="height: 80px; width: 250px; float: left;"/>
+			<label id="appName"> Packman 2021</label>
+			<label id="submittersDetails"> Ron Tyntarev:208205765, Tomer Aizikovich:208297119</label>
+		</div>
+		<div class="menu">
+			<a onclick="showWelcomeScreen()">Welcome</a>
+			<a onclick="register()" >Register</a>
+			<a onclick="logIn()" >Log In</a>
+			<a onclick="aboutScreen()" >About</a>
+		</div>
+		<div id="welcomeContainer">
+			<img src="Img/pacman_logo_white_background-removebg-preview.png" style="height: 350px; width: 550px; margin-left: 25%; margin-right: 25%;">
+			<div id="buttonsContainer">
+				<button id="registerButton" class="welcomeButtons" onclick="register()">Register</button>
+				<button id="logInButton" class="welcomeButtons" style="display: inline-flex; align-items: flex-end;" onclick="logIn()">Log In</button>
+			</div>
+		</div>
+		<div class="outerRegisterAndLogInDiv" id="outerRegisterDiv">
+		<div id="registerDiv" class="forems">
+			<img src="Img/login.png" alt="login" width="200px" height="100px" style="margin-bottom: 3%;">
+			<label class="formHeader" >Register:</label>
+			<form  onsubmit="return false;" id="registerForm">
+				<div class="formDiv">
+				<input type="text" id="userName" name="userName" placeholder="user name" class="formInput" style="height: 100%;"/>
+				<input type="password" id="password" name="password" placeholder="password" class="formInput">
+				<input type="text" id="fullName" name="fullName" placeholder="Full name" class="formInput">
+				<!-- <input type="text" id="lastName" name="lastName" placeholder="Last name" class="formInput"> -->
+				<input type="text" id="email" name="email" placeholder="email" class="formInput">
+				<input type="date" id="birthDate" name="birthDate" class="formInput">
+				<button type="submit" id="submitButton" class="submitButtons" >Register</button>
+			</div>
+				</form>
+		</div>
+	</div>
+	<div class="outerRegisterAndLogInDiv" id="outerLogInDiv">
+		<div id="logInDiv" class="forems">
+			<img src="Img/login.png" alt="login" width="200px" height="100px" style="margin-bottom: 3%;">
+			<label class="formHeader">Log In:</label>
+			<form  onsubmit="return false;" id="logInForm" >
+						<div class="formDiv">
+						<input class="formInput" type="text" id="LIuserName" name="LIuserName" placeholder="user name" />
+						<label id="errorLogInUsername" class="errorFormRow"></label>
+						<input class="formInput" type="password" id="LIpassword" name="LIpassword" placeholder="password">
+						<label id="errorPasswordLogIn" class="errorFormRow"></label>
+					<button type="submit" id="LIsubmitButton" onclick="validateDetailsAfterLogIn()" class="submitButtons" >Login</button>			
+				</div>
+				</form>
+		</div>
+	</div>
+		<div id="gameAndSettingsDiv">
+			<div id="gameDiv" class="divs">
+				<div id="userInfoDiv" class="gameDivs">
+					<label class="informationLabels">Playing user:</label>
+				<label id="userNameToShow"></label>
+			</div>
+				<div id="informationDiv" class="gameDivs">
+					<label class="informationLabels">Time:</label>
+					<label class="informationValues" id="timeLabel">0</label>
+					<label class="informationLabels">Score:</label>
+					<label class="informationValues" id="scoreLabel">0</label>
+					<label class="informationLabels">Lives:</label>
+					<div id="livesDiv" style="display: inline-block;"></div>
+				</div>
+				<div id="gameBoardDiv" class="gameDivs">						
+					<canvas id="myCanvas" width="900" height="450" style="border:1px solid #d3d3d3;"></canvas>
+				</div>
+				<div>
+					<button class="gameButtons" id="newGameButton" onclick="showSettings()">Start new game</button>
+					<button id="stopGameButton" class="gameButtons" onclick="stopGame()">Pause game</button>
+					<button id="resumeGameButton" class="gameButtons" onclick="resumeGame()">Resume game</button>
+					<button id="stopMusicButton" class="gameButtons" onclick="pauseMusic()">Pause music</button>
+					<button id="resumeMusicButton" class="gameButtons" onclick="resumeMusic()">Resume Music</button>
+				</div>
+				
+			</div>
+			<div id="settingsDiv" class="divs">
+				<h3 style="margin-bottom: 3%; font-weight: bold; text-align: center; font-size: 40px;font-style: italic; text-decoration: underline; color: darkred;">Please set your settings:</h3>
+				<br/>
+				<form onsubmit="return false;" id="settingsForm">
+				<table id="settingsTable" style="font-weight: bold; font-size: 30px; color:rgb(11, 76, 95);">
+					<tr>
+						<td>Key Up:</td>
+						<td><input id="keyUp" name="keyUp" type="text" readonly placeholder="Press any key"></td>
+					</tr>
+					<tr id="errorKeyUp"  class="errorRow">
+						<td >Please enter key for up movment</td>
+					</tr>
+					<tr>
+						<td>Key down:</td>
+						<td><input id="keyDown" type="text" readonly placeholder="Press any key"></td>
+					</tr>
+					<tr id="errorKeyDown" class="errorRow">
+						<td colspan="2" style="color: red;">Please enter key for down movment</td>
+					</tr>
+					<tr>
+						<td>Key Left:</td>
+						<td><input id="keyLeft" type="text" readonly placeholder="Press any key"></td>
+					</tr>
+					<tr id="errorLeftKey" class="errorRow"> 
+						<td >Please enter key for left movment</td>
+					</tr>
+					<tr>
+						<td>Key Right:</td>
+						<td><input id="keyRight" readonly type="text" placeholder="Press any key"></td>
+					</tr>
+					<tr id="rightKeyError" class="errorRow" >
+						<td >Please enter key for right movment</td>
+					</tr>
+					<tr>
+						<td>Number of balls in the game:</td>
+						<td><input id="ballsSlider" type="range" class="slider" min="50" max="90" value="60"></td>
+					</tr>
+					<tr>
+						<td>Value:</td>
+						<td><span id="ballsValue">60</span></td>
+					</tr>
+					<tr>
+						<td>Color for 5 points balls: (the biggest ones)</td>
+						<td><input type="color" id="fivePointsColorPicker" ></td>
+					</tr>
+					<tr>
+						<td>Color for 15 points balls: (the medium ones)</td>
+						<td><input type="color" id="fifteenPointsColorPicker"></td>
+					</tr>
+					<tr>
+						<td>Color for 25 points balls: (the smallest ones)</td>
+						<td><input type="color" id="twentyFivePointsColorPicker"></td>
+					</tr>
+					<tr>
+						<td>Time for game (in seconds):</td>
+						<td><input type="text" id="gameTimeInput" placeholder="Min 60 seconds"></td>
+					</tr>
+					<tr class="errorRow" id="gameTimeError">
+						<td></td>
+					</tr>
+					<tr>
+						<td>Number of monsters:</td>
+						<td><input type="range" id="monstersSlider" class="slider" min="1" max="4" value="2"></td>
+					</tr>
+					<tr>
+						<td>Value:</td>
+						<td><span id="monstersNumber">2</span></td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<button class="settingsButtons" id="settingsButton" onclick="validateSettings()">Save settings</button>
+							<button class="settingsButtons" id="randomButton" onclick="generateRandomSettings()" >Generate random settings</button>
+							</td>
+					</tr>
+					<tr class="explanationRow">
+						<td><img src="Img/cherry.png" width="30px" height="30px"></td>
+						<td>50 points</td>
+					</tr>
+					<tr class="explanationRow">
+						<td><img src="Img/drug.jpg" height="30px" width="30px"></td>
+						<td>increase lives in 1 and make the pacman faster</td>
+					</tr>
+					<tr class="explanationRow">
+						<td ><img src="Img/strawberry.png" height="30px" width="30px" ></td>
+						<td>Decrease the speed of the ghosts for limited time</td>
+					</tr>
+				</table>
+			</form>
+			</div>
+		</div>
+		<div id="modalDiv">
+			<div id="modalContent">
+				<span id="closeButton" onclick="closeAbout()">&times;</span>
+				<table style="text-align: center; color: white; font-size: 25px; margin: 0 auto;">
+					<tr>
+						<td>Submitors names:</td>
+						<td>Ron Tyntarev, Tomer Aizikovich</td>
+					</tr>
+					<tr>
+						<td>Jquery plugin:</td>
+						<td>Validation Plugin</td>
+					</tr>
+					<tr>
+						<td>template usage:</td>
+						<td>No</td>
+					</tr>
+					<tr>
+						<td>Difficulties:</td>
+						<td>We had difficulties in arranging html elements as we want</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<footer style="bottom:0; background-color: chocolate;">
+			<table style="font-weight: bolder;">
+				<tr>
+					<td>Creation date:</td>
+					<td>April 4th 2021</td>
+				</tr>
+				<tr>
+					<td>Languages used:</td>
+					<td>JavaScript, Html, Css, Jquery</td>
+				</tr>
+				<tr>
+					<td>Contact information:</td>
+					<td><a href="mailto:ronny54@gmail.com">ronny5423@gmail.com</a>, <a href="mailto:tomeraizikovich@gmail.com">tomeraizikovich@gmail.com</a></td>
+				</tr>
+			</table>
+		</footer>
+		</div>
+	</body>
+</html>
